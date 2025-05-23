@@ -19,6 +19,7 @@ function reducer(state, action) {
         ...state,
         questions: action.payload,
         status: "ready",
+        index: 0,
       };
     case "dataFailed":
       return {
@@ -32,7 +33,10 @@ function reducer(state, action) {
   }
 }
 export default function App() {
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
   const numQuestions = questions.length;
   useEffect(function () {
     fetch("http://localhost:8000/questions")
@@ -49,7 +53,7 @@ export default function App() {
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Question />}
+        {status === "active" && <Question question={questions[index]} />}
       </Main>
     </div>
   );
